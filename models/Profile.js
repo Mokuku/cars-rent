@@ -57,6 +57,9 @@ const ProfileSchema = new Schema({
       },
       description: {
         type: String
+      },
+      imageURL: {
+        type:String
       }
     }
   ],

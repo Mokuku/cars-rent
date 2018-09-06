@@ -33,6 +33,7 @@ class ProfileCreds extends Component {
             </span>
           )}
         </p>
+        <img src={exp.imageURL} alt="img" />
       </li>
     ));
 
@@ -60,6 +61,7 @@ class ProfileCreds extends Component {
             </span>
           )}
         </p>
+        <img src="" alt=""/>
       </li>
     ));
     return (

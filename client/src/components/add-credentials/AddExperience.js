@@ -18,18 +18,38 @@ class AddExperience extends Component {
       current: false,
       description: "",
       errors: {},
-      disabled: false
+      disabled: false,
+      imageURL: '',
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onCheck = this.onCheck.bind(this);
+    this.handleUploadImage = this.handleUploadImage.bind(this);
+
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
+  }
+
+  handleUploadImage(ev) {
+    ev.preventDefault();
+    this.setState({ imageURL: 'update' });
+    const data = new FormData();
+    data.append('file', this.uploadInput.files[0]);
+    data.append('filename', this.fileName.value);
+
+    fetch('http://localhost:3000/upload', {
+      method: 'POST',
+      body: data,
+    }).then((response) => {
+      response.json().then((body) => {
+        this.setState({ imageURL: `http://localhost:3000/${body.file}` });
+      });
+    });
   }
 
   onSubmit(e) {
@@ -42,14 +62,18 @@ class AddExperience extends Component {
       from: this.state.from,
       to: this.state.to,
       current: this.state.current,
-      description: this.state.description
+      description: this.state.description,
+      imageURL:this.state.imageURL
     };
+
+    console.log(expData);
 
     this.props.addExperience(expData, this.props.history);
   }
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+    console.log(this.state)
   }
 
   onCheck(e) {
@@ -59,9 +83,11 @@ class AddExperience extends Component {
     });
   }
 
+
   render() {
     const { errors } = this.state;
-
+    const imgexist=this.state.imageURL;
+    console.log(imgexist.length)
     return (
       <div className="add-experience">
         <div className="container">
@@ -119,6 +145,25 @@ class AddExperience extends Component {
                   onChange={this.onChange}
                   error={errors.description}
                 />
+                
+                 
+                  <div>
+                    <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
+                  </div>
+                  <div>
+                    <input ref={(ref) => { this.fileName = ref; }} type="text" placeholder="Enter the desired name of file" />
+                  </div>
+                  <br />
+                  <div>
+                  <button onClick={this.handleUploadImage}>Upload</button>
+                  </div>
+
+                     {imgexist.length>0 ?             
+                     <img src={this.state.imageURL} alt="img" />
+                      :
+                      <span></span>}
+             
+
                 <input
                   type="submit"
                   value="Submit"
