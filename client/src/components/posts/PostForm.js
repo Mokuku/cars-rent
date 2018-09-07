@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
-import { addPost } from '../../actions/postActions';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
+import { addPost } from "../../actions/postActions";
 
 class PostForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: '',
+      text: "",
       errors: {}
     };
 
@@ -34,7 +34,7 @@ class PostForm extends Component {
     };
 
     this.props.addPost(newPost);
-    this.setState({ text: '' });
+    this.setState({ text: "" });
   }
 
   onChange(e) {
@@ -58,6 +58,21 @@ class PostForm extends Component {
                   onChange={this.onChange}
                   error={errors.text}
                 />
+                <div>
+                  <input
+                    ref={ref => {
+                      this.uploadInput = ref;
+                    }}
+                    type="file"
+                  />
+                </div>
+                <div>soooo</div>
+                <br />
+                <div>
+                  <button onClick={this.handleUploadImage}>Upload</button>
+                </div>
+
+                <img src={this.state.imageURL} alt="img" />
               </div>
               <button type="submit" className="btn btn-dark">
                 Submit
@@ -81,4 +96,7 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { addPost })(PostForm);
+export default connect(
+  mapStateToProps,
+  { addPost }
+)(PostForm);
